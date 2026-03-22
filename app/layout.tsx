@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { DM_Sans, Lora } from "next/font/google";
+import { Toaster } from "sonner";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -27,7 +28,10 @@ export default function RootLayout({
       lang="ko"
       className={`${dmSans.variable} ${lora.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans">{children}</body>
+      <body className="min-h-full flex flex-col font-sans">
+        {children}
+        <Toaster theme="dark" position="bottom-right" />
+      </body>
     </html>
   );
 }
