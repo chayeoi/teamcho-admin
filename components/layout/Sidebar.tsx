@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
@@ -276,14 +276,6 @@ function SidebarContent({
 
 export function Sidebar({ userEmail, userRole }: SidebarProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const pathname = usePathname()
-  const prevPathnameRef = useRef(pathname)
-
-  // 라우트 변경 시 모바일 메뉴 닫기 (setState in render pattern to avoid lint warning)
-  if (prevPathnameRef.current !== pathname) {
-    prevPathnameRef.current = pathname
-    setIsOpen(false)
-  }
 
   // 모바일 메뉴 열릴 때 body 스크롤 잠금
   useEffect(() => {
