@@ -128,3 +128,24 @@
     @apply font-sans;
   }
 }
+
+/* TipTap Editor Styles */
+.prose-editor {
+  font-family: var(--font-lora, serif);
+  color: #E8E8E8;
+  font-size: 18px;
+  line-height: 1.8;
+}
+
+.prose-editor h1 { font-size: 2.25rem; font-weight: 700; color: #F5F5F5; margin: 1.5rem 0 0.75rem; }
+.prose-editor h2 { font-size: 1.75rem; font-weight: 600; color: #F0F0F0; margin: 1.25rem 0 0.5rem; }
+.prose-editor h3 { font-size: 1.375rem; font-weight: 600; color: #EBEBEB; margin: 1rem 0 0.5rem; }
+.prose-editor p { margin: 0.75rem 0; }
+.prose-editor a { color: #E8D5B0; text-decoration: underline; }
+.prose-editor .is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: #444;
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
