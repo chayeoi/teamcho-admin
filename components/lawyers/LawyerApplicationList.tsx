@@ -34,7 +34,12 @@ export function LawyerApplicationList({ applications }: LawyerApplicationListPro
 
   async function handleReview(id: string, action: 'approved' | 'rejected') {
     setLoadingId(id)
-    await reviewApplication(id, action)
+    const result = await reviewApplication(id, action)
+    if (result.error) {
+      alert(result.error)
+      setLoadingId(null)
+      return
+    }
     router.refresh()
     setLoadingId(null)
   }
