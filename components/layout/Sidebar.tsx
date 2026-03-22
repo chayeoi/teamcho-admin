@@ -1,12 +1,20 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
+import { UserRole, DEFAULT_ROLE } from '@/lib/types/roles'
 
 interface SidebarProps {
   userEmail?: string
+  userRole?: UserRole
+}
+
+const roleLabels: Record<UserRole, string> = {
+  super_admin: '슈퍼 관리자',
+  admin: '관리자',
+  operator: '운영자',
 }
 
 const sections = [
@@ -17,6 +25,7 @@ const sections = [
         label: '홈',
         href: '/posts',
         matchExact: true,
+        allowedRoles: ['super_admin', 'admin', 'operator'] as UserRole[],
         icon: (
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
             <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/>
@@ -33,12 +42,31 @@ const sections = [
         label: '포스트',
         href: '/posts',
         matchExact: false,
+        allowedRoles: ['super_admin', 'admin', 'operator'] as UserRole[],
         icon: (
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
             <line x1="9" y1="8" x2="15" y2="8"/>
             <line x1="9" y1="12" x2="14" y2="12"/>
+          </svg>
+        ),
+      },
+    ],
+  },
+  {
+    label: '회원 관리',
+    items: [
+      {
+        label: '변호사 승인',
+        href: '/lawyers',
+        matchExact: false,
+        allowedRoles: ['super_admin'] as UserRole[],
+        icon: (
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+            <polyline points="16 11 18 13 22 9"/>
           </svg>
         ),
       },
@@ -53,13 +81,24 @@ function getInitials(email?: string) {
 
 function SidebarContent({
   userEmail,
+  userRole,
   onClose,
 }: {
   userEmail?: string
+  userRole?: UserRole
   onClose?: () => void
 }) {
   const pathname = usePathname()
   const router = useRouter()
+
+  const visibleSections = sections
+    .map(section => ({
+      ...section,
+      items: section.items.filter(item =>
+        item.allowedRoles.includes(userRole ?? DEFAULT_ROLE)
+      ),
+    }))
+    .filter(section => section.items.length > 0)
 
   async function handleLogout() {
     const supabase = createClient()
@@ -105,7 +144,7 @@ function SidebarContent({
 
       {/* ── 네비게이션 ── */}
       <nav style={{ flex: 1, padding: '8px 12px', overflowY: 'auto' }}>
-        {sections.map((section) => (
+        {visibleSections.map((section) => (
           <div key={section.label ?? '_root'} style={{ marginBottom: '4px' }}>
             {section.label && (
               <div style={{
@@ -193,7 +232,9 @@ function SidebarContent({
             }}>
               {userEmail?.split('@')[0] ?? '관리자'}
             </div>
-            <div style={{ fontSize: '11px', color: '#AAAAAA', marginTop: '1px' }}>관리자</div>
+            <div style={{ fontSize: '11px', color: '#AAAAAA', marginTop: '1px' }}>
+              {roleLabels[userRole ?? DEFAULT_ROLE]}
+            </div>
           </div>
         </div>
 
@@ -233,14 +274,16 @@ function SidebarContent({
   )
 }
 
-export function Sidebar({ userEmail }: SidebarProps) {
+export function Sidebar({ userEmail, userRole }: SidebarProps) {
   const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
+  const prevPathnameRef = useRef(pathname)
 
-  // 라우트 변경 시 모바일 메뉴 닫기
-  useEffect(() => {
+  // 라우트 변경 시 모바일 메뉴 닫기 (setState in render pattern to avoid lint warning)
+  if (prevPathnameRef.current !== pathname) {
+    prevPathnameRef.current = pathname
     setIsOpen(false)
-  }, [pathname])
+  }
 
   // 모바일 메뉴 열릴 때 body 스크롤 잠금
   useEffect(() => {
@@ -267,7 +310,7 @@ export function Sidebar({ userEmail }: SidebarProps) {
           borderRight: '1px solid #EBEBEB',
         }}
       >
-        <SidebarContent userEmail={userEmail} />
+        <SidebarContent userEmail={userEmail} userRole={userRole} />
       </aside>
 
       {/* ── 모바일 상단 바 (md 미만) ── */}
@@ -343,7 +386,7 @@ export function Sidebar({ userEmail }: SidebarProps) {
           flexDirection: 'column',
         }}
       >
-        <SidebarContent userEmail={userEmail} onClose={() => setIsOpen(false)} />
+        <SidebarContent userEmail={userEmail} userRole={userRole} onClose={() => setIsOpen(false)} />
       </aside>
     </>
   )
