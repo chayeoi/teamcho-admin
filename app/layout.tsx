@@ -1,21 +1,21 @@
 import type { Metadata } from "next";
-import { DM_Sans, Lora } from "next/font/google";
+import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
 
-const dmSans = DM_Sans({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-dm-sans",
+  variable: "--font-inter",
 });
 
-const lora = Lora({
+const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-lora",
+  variable: "--font-jakarta",
 });
 
 export const metadata: Metadata = {
-  title: "Admin",
-  description: "Editorial Admin Dashboard",
+  title: "Studio Admin",
+  description: "Content Management Dashboard",
 };
 
 export default function RootLayout({
@@ -26,11 +26,11 @@ export default function RootLayout({
   return (
     <html
       lang="ko"
-      className={`${dmSans.variable} ${lora.variable} h-full antialiased`}
+      className={`${inter.variable} ${plusJakarta.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans">
+      <body className="min-h-full flex flex-col" style={{ fontFamily: "var(--font-jakarta), var(--font-inter), sans-serif" }}>
         {children}
-        <Toaster theme="dark" position="bottom-right" />
+        <Toaster position="bottom-right" richColors />
       </body>
     </html>
   );

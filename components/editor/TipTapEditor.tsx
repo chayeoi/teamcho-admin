@@ -42,6 +42,7 @@ export default function TipTapEditor({ content, onChange }: TipTapEditorProps) {
         class: 'prose-editor focus:outline-none min-h-[500px]',
       },
     },
+    immediatelyRender: false,
   })
 
   async function handleImageUpload(file: File) {
@@ -58,9 +59,9 @@ export default function TipTapEditor({ content, onChange }: TipTapEditorProps) {
   }
 
   return (
-    <div style={{ border: '1px solid #262626', borderRadius: '8px', overflow: 'hidden' }}>
+    <div>
       <EditorToolbar editor={editor} onImageUpload={handleImageUpload} />
-      <div style={{ padding: '32px 48px', backgroundColor: '#0F0F0F', minHeight: '500px' }}>
+      <div style={{ padding: '28px 32px', backgroundColor: '#FFFFFF', minHeight: '500px' }}>
         <EditorContent editor={editor} />
       </div>
     </div>

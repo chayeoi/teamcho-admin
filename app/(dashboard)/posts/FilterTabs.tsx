@@ -11,7 +11,14 @@ const tabs = [
 
 export function FilterTabs({ currentFilter }: { currentFilter: string }) {
   return (
-    <div style={{ display: 'flex', gap: '0', borderBottom: '1px solid #262626', marginBottom: '24px' }}>
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: '4px',
+      backgroundColor: '#F4F5F7',
+      borderRadius: '9px',
+      padding: '3px',
+    }}>
       {tabs.map((tab) => {
         const isActive = currentFilter === tab.value
         return (
@@ -19,13 +26,16 @@ export function FilterTabs({ currentFilter }: { currentFilter: string }) {
             key={tab.value}
             href={`/posts?filter=${tab.value}`}
             style={{
-              padding: '8px 16px',
-              fontSize: '14px',
-              color: isActive ? '#E8D5B0' : '#666',
-              borderBottom: isActive ? '2px solid #E8D5B0' : '2px solid transparent',
+              padding: '5px 12px',
+              fontSize: '12.5px',
+              fontWeight: isActive ? '600' : '500',
+              color: isActive ? '#111111' : '#888888',
+              backgroundColor: isActive ? '#FFFFFF' : 'transparent',
+              borderRadius: '7px',
               textDecoration: 'none',
-              fontWeight: isActive ? '500' : '400',
-              transition: 'color 0.15s',
+              transition: 'all 0.12s',
+              whiteSpace: 'nowrap',
+              boxShadow: isActive ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
             }}
           >
             {tab.label}
