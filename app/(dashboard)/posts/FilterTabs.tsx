@@ -14,9 +14,9 @@ export function FilterTabs({ currentFilter }: { currentFilter: string }) {
     <div style={{
       display: 'flex',
       alignItems: 'center',
-      gap: '4px',
-      backgroundColor: '#F4F5F7',
-      borderRadius: '9px',
+      gap: '2px',
+      backgroundColor: '#F5F5F5',
+      borderRadius: '8px',
       padding: '3px',
     }}>
       {tabs.map((tab) => {
@@ -26,12 +26,12 @@ export function FilterTabs({ currentFilter }: { currentFilter: string }) {
             key={tab.value}
             href={`/posts?filter=${tab.value}`}
             style={{
-              padding: '5px 12px',
-              fontSize: '12.5px',
-              fontWeight: isActive ? '600' : '500',
-              color: isActive ? '#111111' : '#888888',
+              padding: '4px 11px',
+              fontSize: '12px',
+              fontWeight: isActive ? '600' : '400',
+              color: isActive ? '#111111' : '#AAAAAA',
               backgroundColor: isActive ? '#FFFFFF' : 'transparent',
-              borderRadius: '7px',
+              borderRadius: '6px',
               textDecoration: 'none',
               transition: 'all 0.12s',
               whiteSpace: 'nowrap',
