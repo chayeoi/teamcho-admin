@@ -49,16 +49,6 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  // /lawyers 경로는 super_admin만 접근 가능
-  if (pathname.startsWith('/lawyers')) {
-    const role = user.user_metadata?.role
-    if (role !== 'super_admin') {
-      const url = request.nextUrl.clone()
-      url.pathname = '/posts'
-      return NextResponse.redirect(url)
-    }
-  }
-
   // / 경로는 /posts로 리다이렉트
   if (user && pathname === '/') {
     const url = request.nextUrl.clone()

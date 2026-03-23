@@ -39,19 +39,6 @@ const navItems = [
       </svg>
     ),
   },
-  {
-    label: '변호사 승인',
-    href: '/lawyers',
-    exact: false,
-    allowedRoles: ['super_admin'] as UserRole[],
-    icon: (
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-        <circle cx="12" cy="7" r="4"/>
-        <polyline points="16 11 18 13 22 9"/>
-      </svg>
-    ),
-  },
 ]
 
 function getInitials(email?: string) {
