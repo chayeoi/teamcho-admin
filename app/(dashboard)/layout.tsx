@@ -19,7 +19,7 @@ export default async function DashboardLayout({
     <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#F4F5F7' }}>
       <Sidebar userEmail={user.email} userRole={userRole} />
       <main
-        className="md:ml-[260px] pt-[52px] md:pt-0"
+        className="md:ml-[240px] pt-[52px] md:pt-0"
         style={{ flex: 1, minHeight: '100vh', backgroundColor: '#F4F5F7' }}
       >
         {children}

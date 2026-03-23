@@ -11,66 +11,46 @@ interface SidebarProps {
   userRole?: UserRole
 }
 
-const roleLabels: Record<UserRole, string> = {
-  super_admin: '슈퍼 관리자',
-  admin: '관리자',
-  operator: '운영자',
-}
-
-const sections = [
+const navItems = [
   {
-    label: null,
-    items: [
-      {
-        label: '홈',
-        href: '/posts',
-        matchExact: true,
-        allowedRoles: ['super_admin', 'admin', 'operator'] as UserRole[],
-        icon: (
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/>
-            <polyline points="9 21 9 12 15 12 15 21"/>
-          </svg>
-        ),
-      },
-    ],
+    label: '홈',
+    href: '/posts',
+    exact: true,
+    allowedRoles: ['super_admin', 'admin', 'operator'] as UserRole[],
+    icon: (
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/>
+        <polyline points="9 21 9 12 15 12 15 21"/>
+      </svg>
+    ),
   },
   {
-    label: '콘텐츠',
-    items: [
-      {
-        label: '포스트',
-        href: '/posts',
-        matchExact: false,
-        allowedRoles: ['super_admin', 'admin', 'operator'] as UserRole[],
-        icon: (
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-            <line x1="9" y1="8" x2="15" y2="8"/>
-            <line x1="9" y1="12" x2="14" y2="12"/>
-          </svg>
-        ),
-      },
-    ],
+    label: '포스트',
+    href: '/posts',
+    exact: false,
+    hasAdd: true,
+    allowedRoles: ['super_admin', 'admin', 'operator'] as UserRole[],
+    icon: (
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+        <line x1="9" y1="8" x2="15" y2="8"/>
+        <line x1="9" y1="12" x2="14" y2="12"/>
+      </svg>
+    ),
   },
   {
-    label: '회원 관리',
-    items: [
-      {
-        label: '변호사 승인',
-        href: '/lawyers',
-        matchExact: false,
-        allowedRoles: ['super_admin'] as UserRole[],
-        icon: (
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
-            <polyline points="16 11 18 13 22 9"/>
-          </svg>
-        ),
-      },
-    ],
+    label: '변호사 승인',
+    href: '/lawyers',
+    exact: false,
+    allowedRoles: ['super_admin'] as UserRole[],
+    icon: (
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+        <polyline points="16 11 18 13 22 9"/>
+      </svg>
+    ),
   },
 ]
 
@@ -91,14 +71,9 @@ function SidebarContent({
   const pathname = usePathname()
   const router = useRouter()
 
-  const visibleSections = sections
-    .map(section => ({
-      ...section,
-      items: section.items.filter(item =>
-        item.allowedRoles.includes(userRole ?? DEFAULT_ROLE)
-      ),
-    }))
-    .filter(section => section.items.length > 0)
+  const visibleNavItems = navItems.filter(item =>
+    item.allowedRoles.includes(userRole ?? DEFAULT_ROLE)
+  )
 
   async function handleLogout() {
     const supabase = createClient()
@@ -115,27 +90,36 @@ function SidebarContent({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '22px 20px 18px',
+        padding: '28px 24px 24px',
       }}>
-        <div style={{ fontSize: '15px', fontWeight: '700', color: '#111111', letterSpacing: '-0.02em' }}>
-          관리자 대시보드
+        <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
+          <div style={{
+            width: '30px', height: '30px',
+            background: '#111111',
+            borderRadius: '8px',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            </svg>
+          </div>
+          <span style={{ fontSize: '15px', fontWeight: '700', color: '#111111', letterSpacing: '-0.025em' }}>
+            관리자
+          </span>
         </div>
 
-        {/* 모바일 닫기 버튼 */}
         {onClose && (
           <button
             onClick={onClose}
             style={{
-              width: '30px', height: '30px',
-              borderRadius: '8px',
-              border: '1px solid #E5E5E5',
-              backgroundColor: 'transparent',
+              width: '28px', height: '28px', borderRadius: '7px',
+              border: '1px solid #E8E8E8', backgroundColor: 'transparent',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              cursor: 'pointer', color: '#888888',
-              flexShrink: 0,
+              cursor: 'pointer', color: '#999999',
             }}
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
             </svg>
           </button>
@@ -143,132 +127,130 @@ function SidebarContent({
       </div>
 
       {/* ── 네비게이션 ── */}
-      <nav style={{ flex: 1, padding: '8px 12px', overflowY: 'auto' }}>
-        {visibleSections.map((section) => (
-          <div key={section.label ?? '_root'} style={{ marginBottom: '4px' }}>
-            {section.label && (
-              <div style={{
-                fontSize: '10.5px',
-                fontWeight: '700',
-                color: '#BBBBBB',
-                letterSpacing: '0.09em',
-                padding: '8px 10px 4px',
-              }}>
-                {section.label}
-              </div>
-            )}
-            {section.items.map((item) => {
-              const isActive = item.matchExact
-                ? pathname === item.href
-                : pathname.startsWith(item.href + '/')
-              return (
+      <nav style={{ flex: 1, padding: '4px 16px', overflowY: 'auto' }}>
+        {visibleNavItems.map((item) => {
+          const isActive = item.exact
+            ? pathname === item.href
+            : pathname.startsWith(item.href + '/')
+
+          return (
+            <div
+              key={item.label}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: '2px',
+              }}
+            >
+              <Link
+                href={item.href}
+                onClick={onClose}
+                style={{
+                  flex: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '11px',
+                  padding: '9px 10px',
+                  borderRadius: '9px',
+                  textDecoration: 'none',
+                  color: isActive ? '#111111' : '#AAAAAA',
+                  fontWeight: isActive ? '600' : '400',
+                  fontSize: '14px',
+                  transition: 'color 0.12s',
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive) e.currentTarget.style.color = '#555555'
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) e.currentTarget.style.color = '#AAAAAA'
+                }}
+              >
+                <span style={{ display: 'flex', flexShrink: 0 }}>{item.icon}</span>
+                {item.label}
+              </Link>
+
+              {item.hasAdd && (
                 <Link
-                  key={item.href}
-                  href={item.href}
+                  href="/posts/new"
                   onClick={onClose}
                   style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '10px',
-                    padding: '9px 12px',
-                    borderRadius: '9px',
-                    color: isActive ? '#111111' : '#666666',
-                    backgroundColor: isActive ? '#EAEAEA' : 'transparent',
+                    width: '24px', height: '24px',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    borderRadius: '6px',
+                    color: '#BBBBBB',
                     textDecoration: 'none',
-                    fontSize: '13.5px',
-                    fontWeight: isActive ? '600' : '500',
-                    transition: 'all 0.12s ease',
-                    marginBottom: '2px',
+                    fontSize: '18px',
+                    fontWeight: '300',
+                    lineHeight: '1',
+                    transition: 'color 0.12s, background-color 0.12s',
+                    flexShrink: 0,
                   }}
                   onMouseEnter={(e) => {
-                    if (!isActive) {
-                      e.currentTarget.style.backgroundColor = '#EBEBEB'
-                      e.currentTarget.style.color = '#111111'
-                    }
+                    e.currentTarget.style.backgroundColor = '#F2F2F2'
+                    e.currentTarget.style.color = '#555555'
                   }}
                   onMouseLeave={(e) => {
-                    if (!isActive) {
-                      e.currentTarget.style.backgroundColor = 'transparent'
-                      e.currentTarget.style.color = '#666666'
-                    }
+                    e.currentTarget.style.backgroundColor = 'transparent'
+                    e.currentTarget.style.color = '#BBBBBB'
                   }}
                 >
-                  <span style={{ color: isActive ? '#111111' : '#AAAAAA', display: 'flex', flexShrink: 0 }}>
-                    {item.icon}
-                  </span>
-                  {item.label}
+                  +
                 </Link>
-              )
-            })}
-          </div>
-        ))}
+              )}
+            </div>
+          )
+        })}
       </nav>
 
-      {/* ── 유저 프로필 + 로그아웃 ── */}
-      <div style={{ padding: '12px' }}>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px',
-          padding: '10px 12px',
-          borderRadius: '10px',
-          backgroundColor: '#F4F5F7',
-          marginBottom: '4px',
-        }}>
-          <div style={{
-            width: '32px', height: '32px',
-            borderRadius: '50%',
-            background: 'linear-gradient(135deg, #2A2A2A, #444444)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            flexShrink: 0,
-            fontSize: '13px', fontWeight: '700', color: 'white',
-          }}>
-            {getInitials(userEmail)}
-          </div>
-          <div style={{ overflow: 'hidden', flex: 1, minWidth: 0 }}>
-            <div style={{
-              fontSize: '12.5px', fontWeight: '600', color: '#111111',
-              whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-            }}>
-              {userEmail?.split('@')[0] ?? '관리자'}
-            </div>
-            <div style={{ fontSize: '11px', color: '#AAAAAA', marginTop: '1px' }}>
-              {roleLabels[userRole ?? DEFAULT_ROLE]}
-            </div>
-          </div>
-        </div>
-
+      {/* ── 하단 ── */}
+      <div style={{ padding: '0 16px 16px' }}>
+        {/* 로그아웃 */}
         <button
           onClick={handleLogout}
           style={{
-            width: '100%',
-            display: 'flex', alignItems: 'center', gap: '9px',
-            padding: '8px 12px',
-            borderRadius: '8px',
-            color: '#AAAAAA',
-            backgroundColor: 'transparent',
-            border: 'none', cursor: 'pointer',
-            fontSize: '13px', fontWeight: '500',
-            textAlign: 'left',
-            transition: 'all 0.12s ease',
-            fontFamily: 'inherit',
+            width: '100%', display: 'flex', alignItems: 'center', gap: '10px',
+            padding: '9px 10px', borderRadius: '9px',
+            color: '#AAAAAA', backgroundColor: 'transparent', border: 'none',
+            cursor: 'pointer', fontSize: '14px', fontWeight: '400',
+            fontFamily: 'inherit', textAlign: 'left',
+            transition: 'color 0.12s',
           }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = '#FEE2E2'
-            e.currentTarget.style.color = '#DC2626'
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = 'transparent'
-            e.currentTarget.style.color = '#AAAAAA'
-          }}
+          onMouseEnter={(e) => { e.currentTarget.style.color = '#DC2626' }}
+          onMouseLeave={(e) => { e.currentTarget.style.color = '#AAAAAA' }}
         >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
             <polyline points="16 17 21 12 16 7"/>
             <line x1="21" y1="12" x2="9" y2="12"/>
           </svg>
           로그아웃
         </button>
+
+        {/* 유저 이메일 */}
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: '9px',
+          padding: '10px 10px 4px',
+          borderTop: '1px solid #F2F2F2',
+          marginTop: '6px',
+        }}>
+          <div style={{
+            width: '28px', height: '28px', borderRadius: '50%',
+            background: 'linear-gradient(135deg, #2A2A2A, #555555)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: '11px', fontWeight: '700', color: 'white', flexShrink: 0,
+          }}>
+            {getInitials(userEmail)}
+          </div>
+          <div style={{ overflow: 'hidden', minWidth: 0 }}>
+            <div style={{
+              fontSize: '12px', fontWeight: '500', color: '#555555',
+              whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+            }}>
+              {userEmail ?? '관리자'}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )
@@ -277,62 +259,59 @@ function SidebarContent({
 export function Sidebar({ userEmail, userRole }: SidebarProps) {
   const [isOpen, setIsOpen] = useState(false)
 
-  // 모바일 메뉴 열릴 때 body 스크롤 잠금
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-    }
+    document.body.style.overflow = isOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
   }, [isOpen])
 
   return (
     <>
-      {/* ── 데스크탑 사이드바 (md 이상) ── */}
+      {/* ── 데스크탑 사이드바 ── */}
       <aside
         className="hidden md:flex"
         style={{
-          width: '260px',
+          width: '240px',
           minHeight: '100vh',
           backgroundColor: '#FFFFFF',
           flexDirection: 'column',
           position: 'fixed',
           left: 0, top: 0, bottom: 0,
           borderRight: '1px solid #EBEBEB',
+          zIndex: 30,
         }}
       >
         <SidebarContent userEmail={userEmail} userRole={userRole} />
       </aside>
 
-      {/* ── 모바일 상단 바 (md 미만) ── */}
+      {/* ── 모바일 상단 바 ── */}
       <header
         className="flex md:hidden"
         style={{
-          position: 'fixed',
-          top: 0, left: 0, right: 0,
-          height: '52px',
-          backgroundColor: '#FFFFFF',
+          position: 'fixed', top: 0, left: 0, right: 0,
+          height: '52px', backgroundColor: '#FFFFFF',
           borderBottom: '1px solid #EBEBEB',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '0 16px',
-          zIndex: 40,
+          alignItems: 'center', justifyContent: 'space-between',
+          padding: '0 16px', zIndex: 40,
         }}
       >
-        {/* 로고 */}
-        <span style={{ fontSize: '14px', fontWeight: '700', color: '#111111', letterSpacing: '-0.02em' }}>
-          관리자 대시보드
-        </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{
+            width: '26px', height: '26px', background: '#111111',
+            borderRadius: '7px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            </svg>
+          </div>
+          <span style={{ fontSize: '14px', fontWeight: '700', color: '#111111' }}>관리자</span>
+        </div>
 
-        {/* 햄버거 버튼 */}
         <button
           onClick={() => setIsOpen(true)}
           style={{
-            width: '36px', height: '36px',
-            borderRadius: '9px',
-            border: '1px solid #E5E5E5',
-            backgroundColor: '#FFFFFF',
+            width: '36px', height: '36px', borderRadius: '9px',
+            border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             cursor: 'pointer', color: '#555555',
           }}
@@ -345,16 +324,13 @@ export function Sidebar({ userEmail, userRole }: SidebarProps) {
         </button>
       </header>
 
-      {/* ── 모바일 오버레이 backdrop ── */}
+      {/* ── 오버레이 ── */}
       <div
         className="md:hidden"
         onClick={() => setIsOpen(false)}
         style={{
-          position: 'fixed',
-          inset: 0,
-          backgroundColor: 'rgba(0,0,0,0.45)',
-          zIndex: 50,
-          opacity: isOpen ? 1 : 0,
+          position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.4)',
+          zIndex: 50, opacity: isOpen ? 1 : 0,
           pointerEvents: isOpen ? 'auto' : 'none',
           transition: 'opacity 0.25s ease',
         }}
@@ -364,18 +340,12 @@ export function Sidebar({ userEmail, userRole }: SidebarProps) {
       <aside
         className="md:hidden"
         style={{
-          position: 'fixed',
-          top: 0, bottom: 0,
-          left: 0,
-          width: '260px',
-          backgroundColor: '#FFFFFF',
-          zIndex: 60,
+          position: 'fixed', top: 0, bottom: 0, left: 0,
+          width: '240px', backgroundColor: '#FFFFFF',
+          zIndex: 60, borderRight: '1px solid #EBEBEB',
           transform: isOpen ? 'translateX(0)' : 'translateX(-100%)',
           transition: 'transform 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
-          boxShadow: isOpen ? '4px 0 24px rgba(0,0,0,0.12)' : 'none',
-          borderRight: '1px solid #EBEBEB',
-          display: 'flex',
-          flexDirection: 'column',
+          display: 'flex', flexDirection: 'column',
         }}
       >
         <SidebarContent userEmail={userEmail} userRole={userRole} onClose={() => setIsOpen(false)} />
