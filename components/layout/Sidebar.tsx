@@ -4,14 +4,11 @@ import { useState, useEffect } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
+import { UserRole, DEFAULT_ROLE } from '@/lib/types/roles'
 
 interface SidebarProps {
   userEmail?: string
-}
-
-function getInitials(email?: string) {
-  if (!email) return 'A'
-  return email.charAt(0).toUpperCase()
+  userRole?: UserRole
 }
 
 const navItems = [
@@ -19,6 +16,7 @@ const navItems = [
     label: '홈',
     href: '/posts',
     exact: true,
+    allowedRoles: ['super_admin', 'admin', 'operator'] as UserRole[],
     icon: (
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/>
@@ -31,6 +29,7 @@ const navItems = [
     href: '/posts',
     exact: false,
     hasAdd: true,
+    allowedRoles: ['super_admin', 'admin', 'operator'] as UserRole[],
     icon: (
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
@@ -40,30 +39,41 @@ const navItems = [
       </svg>
     ),
   },
-]
-
-const bottomItems = [
   {
-    label: '로그아웃',
+    label: '변호사 승인',
+    href: '/lawyers',
+    exact: false,
+    allowedRoles: ['super_admin'] as UserRole[],
     icon: (
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-        <polyline points="16 17 21 12 16 7"/>
-        <line x1="21" y1="12" x2="9" y2="12"/>
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+        <polyline points="16 11 18 13 22 9"/>
       </svg>
     ),
   },
 ]
 
+function getInitials(email?: string) {
+  if (!email) return 'A'
+  return email.charAt(0).toUpperCase()
+}
+
 function SidebarContent({
   userEmail,
+  userRole,
   onClose,
 }: {
   userEmail?: string
+  userRole?: UserRole
   onClose?: () => void
 }) {
   const pathname = usePathname()
   const router = useRouter()
+
+  const visibleNavItems = navItems.filter(item =>
+    item.allowedRoles.includes(userRole ?? DEFAULT_ROLE)
+  )
 
   async function handleLogout() {
     const supabase = createClient()
@@ -118,7 +128,7 @@ function SidebarContent({
 
       {/* ── 네비게이션 ── */}
       <nav style={{ flex: 1, padding: '4px 16px', overflowY: 'auto' }}>
-        {navItems.map((item) => {
+        {visibleNavItems.map((item) => {
           const isActive = item.exact
             ? pathname === item.href
             : pathname.startsWith(item.href + '/')
@@ -246,13 +256,8 @@ function SidebarContent({
   )
 }
 
-export function Sidebar({ userEmail }: SidebarProps) {
+export function Sidebar({ userEmail, userRole }: SidebarProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const pathname = usePathname()
-
-  useEffect(() => {
-    setIsOpen(false)
-  }, [pathname])
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : ''
@@ -275,7 +280,7 @@ export function Sidebar({ userEmail }: SidebarProps) {
           zIndex: 30,
         }}
       >
-        <SidebarContent userEmail={userEmail} />
+        <SidebarContent userEmail={userEmail} userRole={userRole} />
       </aside>
 
       {/* ── 모바일 상단 바 ── */}
@@ -343,7 +348,7 @@ export function Sidebar({ userEmail }: SidebarProps) {
           display: 'flex', flexDirection: 'column',
         }}
       >
-        <SidebarContent userEmail={userEmail} onClose={() => setIsOpen(false)} />
+        <SidebarContent userEmail={userEmail} userRole={userRole} onClose={() => setIsOpen(false)} />
       </aside>
     </>
   )

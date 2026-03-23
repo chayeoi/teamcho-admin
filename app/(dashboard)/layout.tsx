@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { Sidebar } from '@/components/layout/Sidebar'
+import { getUserRole } from '@/lib/types/roles'
 
 export default async function DashboardLayout({
   children,
@@ -12,9 +13,11 @@ export default async function DashboardLayout({
 
   if (!user) redirect('/login')
 
+  const userRole = getUserRole(user.user_metadata)
+
   return (
     <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#F4F5F7' }}>
-      <Sidebar userEmail={user.email} />
+      <Sidebar userEmail={user.email} userRole={userRole} />
       <main
         className="md:ml-[240px] pt-[52px] md:pt-0"
         style={{ flex: 1, minHeight: '100vh', backgroundColor: '#F4F5F7' }}
