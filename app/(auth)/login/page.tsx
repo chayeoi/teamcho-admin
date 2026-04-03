@@ -44,15 +44,22 @@ export default function LoginPage() {
   }
 
   return (
-    <div style={{ width: '100%', maxWidth: '360px' }}>
-      <div style={{ marginBottom: '32px' }}>
+    <div style={{
+      width: '100%', maxWidth: '380px',
+      backgroundColor: '#FFFFFF',
+      borderRadius: '16px',
+      border: '1px solid #EBEBEB',
+      padding: '36px 32px',
+      boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
+    }}>
+      <div style={{ marginBottom: '28px' }}>
         <h1 style={{
-          fontSize: '22px', fontWeight: '700', color: '#111111',
-          letterSpacing: '-0.03em', margin: '0 0 8px',
+          fontSize: '20px', fontWeight: '700', color: '#111111',
+          letterSpacing: '-0.025em', margin: '0 0 6px',
         }}>
-          다시 오셨군요 👋
+          로그인
         </h1>
-        <p style={{ fontSize: '14px', color: '#AAAAAA', margin: 0 }}>
+        <p style={{ fontSize: '13.5px', color: '#AAAAAA', margin: 0 }}>
           관리자 계정으로 로그인해요
         </p>
       </div>
