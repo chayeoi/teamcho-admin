@@ -79,22 +79,9 @@ function SidebarContent({
         justifyContent: 'space-between',
         padding: '28px 24px 24px',
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
-          <div style={{
-            width: '30px', height: '30px',
-            background: '#111111',
-            borderRadius: '8px',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-            </svg>
-          </div>
-          <span style={{ fontSize: '15px', fontWeight: '700', color: '#111111', letterSpacing: '-0.025em' }}>
-            관리자
-          </span>
-        </div>
+        <span style={{ fontSize: '15px', fontWeight: '700', color: '#111111', letterSpacing: '-0.025em' }}>
+          관리자 대시보드
+        </span>
 
         {onClose && (
           <button
@@ -157,34 +144,6 @@ function SidebarContent({
                 {item.label}
               </Link>
 
-              {item.hasAdd && (
-                <Link
-                  href="/posts/new"
-                  onClick={onClose}
-                  style={{
-                    width: '24px', height: '24px',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    borderRadius: '6px',
-                    color: '#BBBBBB',
-                    textDecoration: 'none',
-                    fontSize: '18px',
-                    fontWeight: '300',
-                    lineHeight: '1',
-                    transition: 'color 0.12s, background-color 0.12s',
-                    flexShrink: 0,
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = '#F2F2F2'
-                    e.currentTarget.style.color = '#555555'
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = 'transparent'
-                    e.currentTarget.style.color = '#BBBBBB'
-                  }}
-                >
-                  +
-                </Link>
-              )}
             </div>
           )
         })}
@@ -281,18 +240,7 @@ export function Sidebar({ userEmail, userRole }: SidebarProps) {
           padding: '0 16px', zIndex: 40,
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <div style={{
-            width: '26px', height: '26px', background: '#111111',
-            borderRadius: '7px', display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-            </svg>
-          </div>
-          <span style={{ fontSize: '14px', fontWeight: '700', color: '#111111' }}>관리자</span>
-        </div>
+        <span style={{ fontSize: '14px', fontWeight: '700', color: '#111111' }}>관리자</span>
 
         <button
           onClick={() => setIsOpen(true)}

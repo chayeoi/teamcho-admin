@@ -28,7 +28,7 @@ export default function RootLayout({
       lang="ko"
       className={`${inter.variable} ${plusJakarta.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col" style={{ fontFamily: "var(--font-jakarta), var(--font-inter), sans-serif" }}>
+      <body className="min-h-full flex flex-col" style={{ fontFamily: "var(--font-jakarta), var(--font-inter), sans-serif" }} suppressHydrationWarning>
         {children}
         <Toaster position="bottom-right" richColors />
       </body>
