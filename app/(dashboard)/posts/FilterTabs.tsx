@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { cn } from '@/lib/utils'
 
 const tabs = [
   { label: '전체', value: 'all' },
@@ -11,32 +12,19 @@ const tabs = [
 
 export function FilterTabs({ currentFilter }: { currentFilter: string }) {
   return (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      gap: '2px',
-      backgroundColor: '#F5F5F5',
-      borderRadius: '8px',
-      padding: '3px',
-    }}>
+    <div className="flex items-center gap-0.5 bg-[#F5F5F5] rounded-lg p-0.5">
       {tabs.map((tab) => {
         const isActive = currentFilter === tab.value
         return (
           <Link
             key={tab.value}
             href={`/posts?filter=${tab.value}`}
-            style={{
-              padding: '4px 11px',
-              fontSize: '12px',
-              fontWeight: isActive ? '600' : '400',
-              color: isActive ? '#111111' : '#AAAAAA',
-              backgroundColor: isActive ? '#FFFFFF' : 'transparent',
-              borderRadius: '6px',
-              textDecoration: 'none',
-              transition: 'all 0.12s',
-              whiteSpace: 'nowrap',
-              boxShadow: isActive ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
-            }}
+            className={cn(
+              'px-[11px] py-1 text-[12px] rounded-md no-underline whitespace-nowrap transition-all duration-[120ms]',
+              isActive
+                ? 'bg-white text-[#111111] font-semibold shadow-sm'
+                : 'text-[#AAAAAA] font-normal hover:text-[#666666]'
+            )}
           >
             {tab.label}
           </Link>

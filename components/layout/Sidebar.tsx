@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { UserRole, DEFAULT_ROLE } from '@/lib/types/roles'
+import { cn } from '@/lib/utils'
 
 interface SidebarProps {
   userEmail?: string
@@ -70,28 +71,18 @@ function SidebarContent({
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+    <div className="flex flex-col h-full">
 
       {/* ── 로고 ── */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '28px 24px 24px',
-      }}>
-        <span style={{ fontSize: '15px', fontWeight: '700', color: '#111111', letterSpacing: '-0.025em' }}>
+      <div className="flex items-center justify-between px-6 pt-7 pb-6">
+        <span className="text-[15px] font-bold text-[#111111] tracking-tight">
           관리자 대시보드
         </span>
 
         {onClose && (
           <button
             onClick={onClose}
-            style={{
-              width: '28px', height: '28px', borderRadius: '7px',
-              border: '1px solid #E8E8E8', backgroundColor: 'transparent',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              cursor: 'pointer', color: '#999999',
-            }}
+            className="w-7 h-7 rounded-[7px] border border-[#E8E8E8] bg-transparent flex items-center justify-center cursor-pointer text-[#999999]"
           >
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
@@ -101,7 +92,7 @@ function SidebarContent({
       </div>
 
       {/* ── 네비게이션 ── */}
-      <nav style={{ flex: 1, padding: '4px 16px', overflowY: 'auto' }}>
+      <nav className="flex-1 overflow-y-auto px-4 py-1">
         {visibleNavItems.map((item) => {
           const isActive = item.exact
             ? pathname === item.href
@@ -110,37 +101,19 @@ function SidebarContent({
           return (
             <div
               key={item.label}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                marginBottom: '2px',
-              }}
+              className="flex items-center justify-between mb-0.5"
             >
               <Link
                 href={item.href}
                 onClick={onClose}
-                style={{
-                  flex: 1,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '11px',
-                  padding: '9px 10px',
-                  borderRadius: '9px',
-                  textDecoration: 'none',
-                  color: isActive ? '#111111' : '#AAAAAA',
-                  fontWeight: isActive ? '600' : '400',
-                  fontSize: '14px',
-                  transition: 'color 0.12s',
-                }}
-                onMouseEnter={(e) => {
-                  if (!isActive) e.currentTarget.style.color = '#555555'
-                }}
-                onMouseLeave={(e) => {
-                  if (!isActive) e.currentTarget.style.color = '#AAAAAA'
-                }}
+                className={cn(
+                  'flex-1 flex items-center gap-[11px] px-2.5 py-2.5 rounded-xl text-sm transition-colors no-underline',
+                  isActive
+                    ? 'text-[#111111] font-semibold'
+                    : 'text-[#AAAAAA] font-normal hover:text-[#555555]'
+                )}
               >
-                <span style={{ display: 'flex', flexShrink: 0 }}>{item.icon}</span>
+                <span className="flex flex-shrink-0">{item.icon}</span>
                 {item.label}
               </Link>
 
@@ -150,20 +123,11 @@ function SidebarContent({
       </nav>
 
       {/* ── 하단 ── */}
-      <div style={{ padding: '0 16px 16px' }}>
+      <div className="px-4 pb-4">
         {/* 로그아웃 */}
         <button
           onClick={handleLogout}
-          style={{
-            width: '100%', display: 'flex', alignItems: 'center', gap: '10px',
-            padding: '9px 10px', borderRadius: '9px',
-            color: '#AAAAAA', backgroundColor: 'transparent', border: 'none',
-            cursor: 'pointer', fontSize: '14px', fontWeight: '400',
-            fontFamily: 'inherit', textAlign: 'left',
-            transition: 'color 0.12s',
-          }}
-          onMouseEnter={(e) => { e.currentTarget.style.color = '#DC2626' }}
-          onMouseLeave={(e) => { e.currentTarget.style.color = '#AAAAAA' }}
+          className="w-full flex items-center gap-2.5 px-2.5 py-2.5 rounded-xl text-sm text-[#AAAAAA] hover:text-red-600 bg-transparent border-none cursor-pointer font-normal text-left transition-colors font-[inherit]"
         >
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
@@ -174,25 +138,12 @@ function SidebarContent({
         </button>
 
         {/* 유저 이메일 */}
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: '9px',
-          padding: '10px 10px 4px',
-          borderTop: '1px solid #F2F2F2',
-          marginTop: '6px',
-        }}>
-          <div style={{
-            width: '28px', height: '28px', borderRadius: '50%',
-            background: 'linear-gradient(135deg, #2A2A2A, #555555)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: '11px', fontWeight: '700', color: 'white', flexShrink: 0,
-          }}>
+        <div className="flex items-center gap-2.5 px-2.5 pt-2.5 pb-1 border-t border-[#F2F2F2] mt-1.5">
+          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#2A2A2A] to-[#555555] flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0">
             {getInitials(userEmail)}
           </div>
-          <div style={{ overflow: 'hidden', minWidth: 0 }}>
-            <div style={{
-              fontSize: '12px', fontWeight: '500', color: '#555555',
-              whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-            }}>
+          <div className="overflow-hidden min-w-0">
+            <div className="text-xs font-medium text-[#555555] whitespace-nowrap overflow-hidden text-ellipsis">
               {userEmail ?? '관리자'}
             </div>
           </div>
@@ -213,43 +164,17 @@ export function Sidebar({ userEmail, userRole }: SidebarProps) {
   return (
     <>
       {/* ── 데스크탑 사이드바 ── */}
-      <aside
-        className="hidden md:flex"
-        style={{
-          width: '240px',
-          minHeight: '100vh',
-          backgroundColor: '#FFFFFF',
-          flexDirection: 'column',
-          position: 'fixed',
-          left: 0, top: 0, bottom: 0,
-          borderRight: '1px solid #EBEBEB',
-          zIndex: 30,
-        }}
-      >
+      <aside className="hidden md:flex flex-col fixed left-0 top-0 bottom-0 w-[240px] bg-white border-r border-[#EBEBEB] z-30">
         <SidebarContent userEmail={userEmail} userRole={userRole} />
       </aside>
 
       {/* ── 모바일 상단 바 ── */}
-      <header
-        className="flex md:hidden"
-        style={{
-          position: 'fixed', top: 0, left: 0, right: 0,
-          height: '52px', backgroundColor: '#FFFFFF',
-          borderBottom: '1px solid #EBEBEB',
-          alignItems: 'center', justifyContent: 'space-between',
-          padding: '0 16px', zIndex: 40,
-        }}
-      >
-        <span style={{ fontSize: '14px', fontWeight: '700', color: '#111111' }}>관리자</span>
+      <header className="flex md:hidden fixed top-0 left-0 right-0 h-[52px] bg-white border-b border-[#EBEBEB] items-center justify-between px-4 z-40">
+        <span className="text-sm font-bold text-[#111111]">관리자</span>
 
         <button
           onClick={() => setIsOpen(true)}
-          style={{
-            width: '36px', height: '36px', borderRadius: '9px',
-            border: '1px solid #E5E5E5', backgroundColor: '#FFFFFF',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            cursor: 'pointer', color: '#555555',
-          }}
+          className="w-9 h-9 rounded-[9px] border border-[#E5E5E5] bg-white flex items-center justify-center cursor-pointer text-[#555555]"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <line x1="3" y1="6" x2="21" y2="6"/>
@@ -261,27 +186,19 @@ export function Sidebar({ userEmail, userRole }: SidebarProps) {
 
       {/* ── 오버레이 ── */}
       <div
-        className="md:hidden"
+        className={cn(
+          'md:hidden fixed inset-0 bg-black/45 z-50 transition-opacity duration-300',
+          isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        )}
         onClick={() => setIsOpen(false)}
-        style={{
-          position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.4)',
-          zIndex: 50, opacity: isOpen ? 1 : 0,
-          pointerEvents: isOpen ? 'auto' : 'none',
-          transition: 'opacity 0.25s ease',
-        }}
       />
 
       {/* ── 모바일 드로어 ── */}
       <aside
-        className="md:hidden"
-        style={{
-          position: 'fixed', top: 0, bottom: 0, left: 0,
-          width: '240px', backgroundColor: '#FFFFFF',
-          zIndex: 60, borderRight: '1px solid #EBEBEB',
-          transform: isOpen ? 'translateX(0)' : 'translateX(-100%)',
-          transition: 'transform 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
-          display: 'flex', flexDirection: 'column',
-        }}
+        className={cn(
+          'md:hidden fixed top-0 bottom-0 left-0 w-[240px] bg-white border-r border-[#EBEBEB] z-[60] flex flex-col transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]',
+          isOpen ? 'translate-x-0' : '-translate-x-full'
+        )}
       >
         <SidebarContent userEmail={userEmail} userRole={userRole} onClose={() => setIsOpen(false)} />
       </aside>

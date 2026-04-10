@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { cn } from '@/lib/utils'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -29,112 +30,79 @@ export default function LoginPage() {
     router.refresh()
   }
 
-  const inputStyle: React.CSSProperties = {
-    width: '100%',
-    padding: '10px 14px',
-    fontSize: '14px',
-    color: '#111111',
-    backgroundColor: '#FAFAFA',
-    border: '1px solid #E5E5E5',
-    borderRadius: '9px',
-    outline: 'none',
-    boxSizing: 'border-box',
-    transition: 'border-color 0.12s, box-shadow 0.12s, background-color 0.12s',
-    fontFamily: 'inherit',
-  }
+  const inputClassName =
+    'w-full px-[14px] py-[10px] text-sm text-[#111111] bg-[#FAFAFA] border border-[#E5E5E5] rounded-[9px] outline-none transition-[border-color,box-shadow,background-color] duration-[120ms] font-[inherit] focus:border-[#111111] focus:bg-white focus:ring-2 focus:ring-black/5'
 
   return (
-    <div style={{
-      width: '100%', maxWidth: '380px',
-      backgroundColor: '#FFFFFF',
-      borderRadius: '16px',
-      border: '1px solid #EBEBEB',
-      padding: '36px 32px',
-      boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
-    }}>
-      <div style={{ marginBottom: '28px' }}>
-        <h1 style={{
-          fontSize: '20px', fontWeight: '700', color: '#111111',
-          letterSpacing: '-0.025em', margin: '0 0 6px',
-        }}>
+    <div className="w-full max-w-[380px] bg-white rounded-2xl border border-[#EBEBEB] px-8 py-9 shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+      <div className="mb-7">
+        <h1 className="text-[20px] font-bold text-[#111111] tracking-[-0.025em] mb-1.5">
           로그인
         </h1>
-        <p style={{ fontSize: '13.5px', color: '#AAAAAA', margin: 0 }}>
+        <p className="text-[13.5px] text-[#AAAAAA]">
           관리자 계정으로 로그인해요
         </p>
       </div>
 
       <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '14px' }}>
-          <label style={{
-            display: 'block', fontSize: '13px', fontWeight: '600',
-            color: '#333333', marginBottom: '7px',
-          }}>
+        <div className="mb-[14px]">
+          <label className="block text-[13px] font-semibold text-[#333333] mb-[7px]">
             이메일
           </label>
           <input
-            type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-            required placeholder="admin@example.com" style={inputStyle}
-            onFocus={(e) => {
-              e.currentTarget.style.borderColor = '#111111'
-              e.currentTarget.style.backgroundColor = '#FFFFFF'
-              e.currentTarget.style.boxShadow = '0 0 0 3px rgba(0,0,0,0.06)'
-            }}
-            onBlur={(e) => {
-              e.currentTarget.style.borderColor = '#E5E5E5'
-              e.currentTarget.style.backgroundColor = '#FAFAFA'
-              e.currentTarget.style.boxShadow = 'none'
-            }}
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            placeholder="admin@example.com"
+            className={inputClassName}
           />
         </div>
 
-        <div style={{ marginBottom: '22px' }}>
-          <label style={{
-            display: 'block', fontSize: '13px', fontWeight: '600',
-            color: '#333333', marginBottom: '7px',
-          }}>
+        <div className="mb-[22px]">
+          <label className="block text-[13px] font-semibold text-[#333333] mb-[7px]">
             비밀번호
           </label>
           <input
-            type="password" value={password} onChange={(e) => setPassword(e.target.value)}
-            required placeholder="••••••••" style={inputStyle}
-            onFocus={(e) => {
-              e.currentTarget.style.borderColor = '#111111'
-              e.currentTarget.style.backgroundColor = '#FFFFFF'
-              e.currentTarget.style.boxShadow = '0 0 0 3px rgba(0,0,0,0.06)'
-            }}
-            onBlur={(e) => {
-              e.currentTarget.style.borderColor = '#E5E5E5'
-              e.currentTarget.style.backgroundColor = '#FAFAFA'
-              e.currentTarget.style.boxShadow = 'none'
-            }}
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            placeholder="••••••••"
+            className={inputClassName}
           />
         </div>
 
         {error && (
-          <div style={{
-            display: 'flex', alignItems: 'center', gap: '8px',
-            padding: '10px 14px', backgroundColor: '#FEF2F2',
-            border: '1px solid #FECACA', borderRadius: '9px', marginBottom: '14px',
-          }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#EF4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          <div className="flex items-center gap-2 px-[14px] py-[10px] bg-[#FEF2F2] border border-[#FECACA] rounded-[9px] mb-[14px]">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#EF4444"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="shrink-0"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
             </svg>
-            <p style={{ fontSize: '13px', color: '#DC2626', margin: 0 }}>{error}</p>
+            <p className="text-[13px] text-[#DC2626]">{error}</p>
           </div>
         )}
 
         <button
-          type="submit" disabled={loading}
-          style={{
-            width: '100%', padding: '11px',
-            fontSize: '14px', fontWeight: '700', color: '#FFFFFF',
-            background: loading ? '#888888' : 'linear-gradient(135deg, #1A1A1A 0%, #2E2E2E 100%)',
-            border: 'none', borderRadius: '9px',
-            cursor: loading ? 'not-allowed' : 'pointer',
-            boxShadow: loading ? 'none' : '0 2px 8px rgba(0,0,0,0.2)',
-            transition: 'all 0.15s', fontFamily: 'inherit',
-          }}
+          type="submit"
+          disabled={loading}
+          className={cn(
+            'w-full py-[11px] text-sm font-bold text-white border-none rounded-[9px] transition-all duration-150 font-[inherit]',
+            loading
+              ? 'bg-[#888888] cursor-not-allowed shadow-none'
+              : 'bg-gradient-to-br from-[#1A1A1A] to-[#2E2E2E] cursor-pointer shadow-[0_2px_8px_rgba(0,0,0,0.2)]'
+          )}
         >
           {loading ? '로그인 중...' : '로그인 →'}
         </button>

@@ -59,10 +59,10 @@ export default function TipTapEditor({ content, onChange }: TipTapEditorProps) {
   }
 
   return (
-    <div>
+    <div className="flex flex-col flex-1">
       <EditorToolbar editor={editor} onImageUpload={handleImageUpload} />
-      <div style={{ padding: '28px 32px', backgroundColor: '#FFFFFF', minHeight: '500px' }}>
-        <EditorContent editor={editor} />
+      <div className="flex-1 overflow-y-auto">
+        <EditorContent editor={editor} className="prose-editor min-h-[500px] px-8 py-7 bg-white outline-none" />
       </div>
     </div>
   )

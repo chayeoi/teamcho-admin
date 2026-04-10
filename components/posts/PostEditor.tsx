@@ -7,29 +7,17 @@ import Link from 'next/link'
 import { toast } from 'sonner'
 import { createPost, updatePost } from '@/lib/actions/posts'
 import { PublishDialog } from '@/components/posts/PublishDialog'
+import { cn } from '@/lib/utils'
 
 const TipTapEditor = dynamic(
   () => import('@/components/editor/TipTapEditor').then((m) => m.default),
   {
     ssr: false,
     loading: () => (
-      <div style={{
-        minHeight: '500px',
-        backgroundColor: '#FFFFFF',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
-          <div style={{
-            width: '28px',
-            height: '28px',
-            borderRadius: '50%',
-            border: '2px solid #EBEBEB',
-            borderTopColor: '#111111',
-            animation: 'spin 0.7s linear infinite',
-          }} />
-          <span style={{ fontSize: '13px', color: '#AAAAAA' }}>에디터 불러오는 중...</span>
+      <div className="min-h-[500px] bg-white flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-7 h-7 rounded-full border-2 border-[#EBEBEB] border-t-[#111111] animate-spin" />
+          <span className="text-[13px] text-[#AAAAAA]">에디터 불러오는 중...</span>
         </div>
       </div>
     ),
@@ -76,45 +64,27 @@ export function PostEditor({ initialData }: PostEditorProps) {
   }
 
   return (
-    <div style={{ backgroundColor: '#FFFFFF', minHeight: '100vh' }}>
+    <div className="min-h-screen bg-white flex flex-col">
 
       {/* ── 상단 헤더 ── */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '0 32px',
-        height: '56px',
-        backgroundColor: '#FFFFFF',
-        borderBottom: '1px solid #EBEBEB',
-        position: 'sticky',
-        top: 0,
-        zIndex: 20,
-      }}>
+      <div className="flex items-center justify-between px-8 py-4 border-b border-[#EBEBEB] bg-white sticky top-0 z-20">
         {/* 브레드크럼 */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px' }}>
-          <Link href="/posts" style={{ color: '#AAAAAA', textDecoration: 'none', fontWeight: '500' }}>
+        <div className="flex items-center gap-1.5 text-[13px]">
+          <Link href="/posts" className="text-[#AAAAAA] no-underline font-medium">
             포스트
           </Link>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#CCCCCC" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="9 18 15 12 9 6"/>
           </svg>
-          <span style={{ color: '#111111', fontWeight: '600' }}>
+          <span className="text-[#111111] font-semibold">
             {postId ? '글 수정' : '새 글 작성'}
           </span>
         </div>
 
         {/* 액션 버튼 */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div className="flex items-center gap-2">
           {initialData?.status && (
-            <span style={{
-              fontSize: '11.5px',
-              fontWeight: '600',
-              color: '#AAAAAA',
-              padding: '3px 9px',
-              backgroundColor: '#F2F2F2',
-              borderRadius: '20px',
-            }}>
+            <span className="px-2 py-0.5 rounded-full text-xs font-medium text-[#AAAAAA] bg-[#F2F2F2]">
               {statusLabel[initialData.status] ?? initialData.status}
             </span>
           )}
@@ -122,30 +92,12 @@ export function PostEditor({ initialData }: PostEditorProps) {
           <button
             onClick={handleSave}
             disabled={isSaving}
-            style={{
-              padding: '7px 15px',
-              fontSize: '13px',
-              fontWeight: '600',
-              color: isSaving ? '#AAAAAA' : '#555555',
-              backgroundColor: 'transparent',
-              border: '1px solid #E5E5E5',
-              borderRadius: '8px',
-              cursor: isSaving ? 'not-allowed' : 'pointer',
-              transition: 'all 0.12s',
-              fontFamily: 'inherit',
-            }}
-            onMouseEnter={(e) => {
-              if (!isSaving) {
-                e.currentTarget.style.backgroundColor = '#F5F5F5'
-                e.currentTarget.style.borderColor = '#CCCCCC'
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!isSaving) {
-                e.currentTarget.style.backgroundColor = 'transparent'
-                e.currentTarget.style.borderColor = '#E5E5E5'
-              }
-            }}
+            className={cn(
+              'px-4 py-1.5 text-[13px] font-medium rounded-lg border border-[#E5E5E5] transition-all',
+              isSaving
+                ? 'text-[#AAAAAA] bg-transparent cursor-not-allowed'
+                : 'text-[#555555] bg-[#F5F5F5] hover:bg-[#EBEBEB] cursor-pointer'
+            )}
           >
             {isSaving ? '저장 중...' : '임시저장'}
           </button>
@@ -155,28 +107,7 @@ export function PostEditor({ initialData }: PostEditorProps) {
               if (!postId) { toast.error('먼저 임시저장을 해 주세요'); return }
               setPublishDialogOpen(true)
             }}
-            style={{
-              padding: '7px 18px',
-              fontSize: '13px',
-              fontWeight: '700',
-              color: '#FFFFFF',
-              background: 'linear-gradient(135deg, #1A1A1A 0%, #2E2E2E 100%)',
-              border: 'none',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
-              transition: 'all 0.12s',
-              letterSpacing: '-0.01em',
-              fontFamily: 'inherit',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)'
-              e.currentTarget.style.transform = 'translateY(-1px)'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)'
-              e.currentTarget.style.transform = 'translateY(0)'
-            }}
+            className="px-4 py-1.5 text-[13px] font-bold text-white bg-gradient-to-br from-[#1A1A1A] to-[#2E2E2E] rounded-lg shadow-md hover:-translate-y-px hover:shadow-lg transition-all border-none cursor-pointer"
           >
             발행하기
           </button>
@@ -184,44 +115,21 @@ export function PostEditor({ initialData }: PostEditorProps) {
       </div>
 
       {/* ── 에디터 본문 ── */}
-      <div style={{ maxWidth: '820px', margin: '0 auto', padding: '36px 24px 80px' }}>
+      <div className="max-w-[820px] mx-auto w-full px-6 pt-9 pb-20">
 
         {/* 제목 카드 */}
-        <div style={{
-          backgroundColor: '#FFFFFF',
-          borderRadius: '12px',
-          border: '1px solid #EBEBEB',
-          padding: '22px 28px',
-          marginBottom: '10px',
-        }}>
+        <div className="bg-white rounded-xl border border-[#EBEBEB] px-7 py-[22px] mb-2.5">
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="제목을 입력하세요..."
-            style={{
-              width: '100%',
-              border: 'none',
-              outline: 'none',
-              fontSize: '23px',
-              fontWeight: '700',
-              color: '#111111',
-              backgroundColor: 'transparent',
-              letterSpacing: '-0.025em',
-              lineHeight: '1.35',
-              boxSizing: 'border-box',
-              fontFamily: 'inherit',
-            }}
+            className="w-full border-none outline-none text-[23px] font-bold text-[#111111] bg-transparent tracking-[-0.025em] leading-[1.35]"
           />
         </div>
 
         {/* 에디터 카드 */}
-        <div style={{
-          backgroundColor: '#FFFFFF',
-          borderRadius: '12px',
-          border: '1px solid #EBEBEB',
-          overflow: 'hidden',
-        }}>
+        <div className="bg-white rounded-xl border border-[#EBEBEB] overflow-hidden">
           <TipTapEditor content={content} onChange={setContent} />
         </div>
       </div>
@@ -234,8 +142,6 @@ export function PostEditor({ initialData }: PostEditorProps) {
           onSuccess={() => router.push('/posts')}
         />
       )}
-
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   )
 }

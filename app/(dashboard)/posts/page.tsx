@@ -5,6 +5,7 @@ import { FilterTabs } from './FilterTabs'
 import Link from 'next/link'
 import { format } from 'date-fns'
 import { ko } from 'date-fns/locale'
+import { cn } from '@/lib/utils'
 
 interface PageProps {
   searchParams: Promise<{ filter?: string }>
@@ -17,7 +18,7 @@ export default async function PostsPage({ searchParams }: PageProps) {
     : 'all'
 
   const supabase = await createClient()
-  
+
   const [{ data: { user } }, allPosts, posts] = await Promise.all([
     supabase.auth.getUser(),
     getPosts('all'),
@@ -82,37 +83,19 @@ export default async function PostsPage({ searchParams }: PageProps) {
   ]
 
   return (
-    <div style={{ padding: '36px 36px 56px', minHeight: '100vh' }}>
+    <div className="min-h-screen p-9 pb-14">
 
       {/* ── 헤더 ── */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-        marginBottom: '6px',
-      }}>
+      <div className="flex justify-between items-start mb-1.5">
         <div>
-          <h1 style={{
-            fontSize: '30px',
-            fontWeight: '700',
-            color: '#111111',
-            letterSpacing: '-0.035em',
-            margin: '0 0 6px',
-            lineHeight: '1.15',
-          }}>
+          <h1 className="text-[30px] font-bold text-[#111111] tracking-[-0.035em] m-0 mb-1.5 leading-[1.15]">
             안녕하세요, {userName}님
           </h1>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0, paddingTop: '4px' }}>
-          <div style={{
-            display: 'flex', alignItems: 'center', gap: '8px',
-            padding: '8px 14px',
-            backgroundColor: '#FFFFFF',
-            borderRadius: '10px',
-            border: '1px solid #EBEBEB',
-          }}>
-            <span style={{ fontSize: '13px', fontWeight: '500', color: '#666666', whiteSpace: 'nowrap' }}>
+        <div className="flex items-center gap-2.5 flex-shrink-0 pt-1">
+          <div className="flex items-center gap-2 px-3.5 py-2 bg-white rounded-[10px] border border-[#EBEBEB]">
+            <span className="text-[13px] font-medium text-[#666666] whitespace-nowrap">
               {today}
             </span>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#AAAAAA" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -126,53 +109,32 @@ export default async function PostsPage({ searchParams }: PageProps) {
       </div>
 
       {/* ── 구분선 ── */}
-      <div style={{ height: '1px', backgroundColor: '#EBEBEB', margin: '24px 0' }} />
+      <div className="h-px bg-[#EBEBEB] my-6" />
 
       {/* ── 통계 바 (divider 방식) ── */}
-      <div style={{
-        backgroundColor: '#FFFFFF',
-        borderRadius: '16px',
-        border: '1px solid #EBEBEB',
-        display: 'flex',
-        marginBottom: '28px',
-        overflow: 'hidden',
-      }}>
+      <div className="bg-white rounded-2xl border border-[#EBEBEB] flex mb-7 overflow-hidden">
         {stats.map((stat, i) => (
           <div
             key={stat.label}
-            style={{
-              flex: 1,
-              display: 'flex',
-              alignItems: 'center',
-              gap: '16px',
-              padding: '24px 26px',
-              borderLeft: i > 0 ? '1px solid #F0F0F0' : 'none',
-            }}
+            className={cn(
+              'flex-1 flex items-center gap-4 p-6',
+              i > 0 && 'border-l border-[#F0F0F0]'
+            )}
           >
             {/* 아이콘 circle */}
-            <div style={{
-              width: '46px', height: '46px',
-              borderRadius: '50%',
-              backgroundColor: '#F5F5F5',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              flexShrink: 0,
-              color: '#666666',
-            }}>
+            <div className="size-[46px] rounded-full bg-[#F5F5F5] flex items-center justify-center flex-shrink-0 text-[#666666]">
               {stat.icon}
             </div>
             {/* 텍스트 */}
             <div>
-              <div style={{ fontSize: '12px', fontWeight: '500', color: '#AAAAAA', marginBottom: '4px' }}>
+              <div className="text-[12px] font-medium text-[#AAAAAA] mb-1">
                 {stat.label}
               </div>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-                <span style={{
-                  fontSize: '28px', fontWeight: '700', color: '#111111',
-                  letterSpacing: '-0.04em', lineHeight: '1',
-                }}>
+              <div className="flex items-baseline gap-2">
+                <span className="text-[28px] font-bold text-[#111111] tracking-[-0.04em] leading-none">
                   {stat.value}
                 </span>
-                <span style={{ fontSize: '11.5px', color: '#CCCCCC', fontWeight: '400' }}>
+                <span className="text-[11.5px] text-[#CCCCCC] font-normal">
                   {stat.sub}
                 </span>
               </div>
@@ -182,50 +144,24 @@ export default async function PostsPage({ searchParams }: PageProps) {
       </div>
 
       {/* ── 포스트 목록 ── */}
-      <div style={{
-        backgroundColor: '#FFFFFF',
-        borderRadius: '16px',
-        border: '1px solid #EBEBEB',
-        overflow: 'hidden',
-      }}>
+      <div className="bg-white rounded-2xl border border-[#EBEBEB] overflow-hidden">
         {/* 카드 헤더 */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '20px 24px 16px',
-          borderBottom: '1px solid #F5F5F5',
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontSize: '16px', fontWeight: '700', color: '#111111', letterSpacing: '-0.02em' }}>
+        <div className="flex items-center justify-between px-6 py-5 border-b border-[#F5F5F5]">
+          <div className="flex items-center gap-2.5">
+            <span className="text-[16px] font-bold text-[#111111] tracking-[-0.02em]">
               포스트 목록
             </span>
             {counts.all > 0 && (
-              <span style={{
-                padding: '2px 9px',
-                backgroundColor: '#F2F2F2',
-                borderRadius: '20px',
-                fontSize: '12px',
-                fontWeight: '600',
-                color: '#888888',
-              }}>
+              <span className="px-[9px] py-0.5 bg-[#F2F2F2] rounded-[20px] text-[12px] font-semibold text-[#888888]">
                 {counts.all}
               </span>
             )}
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div className="flex items-center gap-2.5">
             <FilterTabs currentFilter={validFilter} />
-            <Link href="/posts/new" style={{ textDecoration: 'none' }}>
-              <button style={{
-                display: 'flex', alignItems: 'center', gap: '6px',
-                padding: '7px 14px',
-                backgroundColor: '#111111', color: '#FFFFFF',
-                border: 'none', borderRadius: '8px',
-                fontSize: '12.5px', fontWeight: '600',
-                cursor: 'pointer', fontFamily: 'inherit',
-                whiteSpace: 'nowrap',
-              }}>
+            <Link href="/posts/new" className="no-underline">
+              <button className="flex items-center gap-1.5 px-3.5 py-1.5 bg-[#111111] text-white border-none rounded-lg text-[12.5px] font-semibold cursor-pointer font-[inherit] whitespace-nowrap">
                 <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
                 </svg>

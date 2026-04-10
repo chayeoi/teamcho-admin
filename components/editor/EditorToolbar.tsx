@@ -2,6 +2,7 @@
 
 import { type Editor } from '@tiptap/react'
 import { useRef, useState, useEffect } from 'react'
+import { cn } from '@/lib/utils'
 
 interface EditorToolbarProps {
   editor: Editor | null
@@ -21,34 +22,12 @@ function Btn({
       type="button"
       onClick={onClick}
       title={title}
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '30px',
-        height: '28px',
-        borderRadius: '6px',
-        border: 'none',
-        cursor: 'pointer',
-        fontSize: '12.5px',
-        fontWeight: '600',
-        backgroundColor: active ? '#EBEBEB' : 'transparent',
-        color: active ? '#111111' : '#666666',
-        transition: 'all 0.1s',
-        fontFamily: 'inherit',
-      }}
-      onMouseEnter={(e) => {
-        if (!active) {
-          e.currentTarget.style.backgroundColor = '#F2F2F2'
-          e.currentTarget.style.color = '#111111'
-        }
-      }}
-      onMouseLeave={(e) => {
-        if (!active) {
-          e.currentTarget.style.backgroundColor = 'transparent'
-          e.currentTarget.style.color = '#666666'
-        }
-      }}
+      className={cn(
+        'inline-flex items-center justify-center w-[30px] h-7 rounded-md text-[12.5px] font-semibold transition-all border-none cursor-pointer',
+        active
+          ? 'bg-[#EBEBEB] text-[#111111]'
+          : 'bg-transparent text-[#666666] hover:bg-[#F2F2F2] hover:text-[#111111]'
+      )}
     >
       {children}
     </button>
@@ -56,7 +35,7 @@ function Btn({
 }
 
 function Sep() {
-  return <div style={{ width: '1px', height: '18px', backgroundColor: '#E5E5E5', margin: '0 4px', flexShrink: 0 }} />
+  return <div className="w-px h-[18px] bg-[#E5E5E5] mx-1 flex-shrink-0" />
 }
 
 export default function EditorToolbar({ editor, onImageUpload }: EditorToolbarProps) {
@@ -109,18 +88,9 @@ export default function EditorToolbar({ editor, onImageUpload }: EditorToolbarPr
   }
 
   return (
-    <div style={{
-      backgroundColor: '#FAFAFA',
-      borderBottom: '1px solid #EBEBEB',
-    }}>
+    <div className="bg-[#FAFAFA] border-b border-[#EBEBEB]">
       {/* ── 기본 툴바 ── */}
-      <div style={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        alignItems: 'center',
-        gap: '2px',
-        padding: '8px 12px',
-      }}>
+      <div className="flex flex-wrap items-center gap-0.5 px-3 py-2">
         <Btn onClick={() => editor.chain().focus().toggleBold().run()} active={editor.isActive('bold')} title="굵게">
           <strong>B</strong>
         </Btn>
@@ -128,7 +98,7 @@ export default function EditorToolbar({ editor, onImageUpload }: EditorToolbarPr
           <em>I</em>
         </Btn>
         <Btn onClick={() => editor.chain().focus().toggleUnderline().run()} active={editor.isActive('underline')} title="밑줄">
-          <span style={{ textDecoration: 'underline' }}>U</span>
+          <span className="underline">U</span>
         </Btn>
 
         <Sep />
@@ -181,15 +151,8 @@ export default function EditorToolbar({ editor, onImageUpload }: EditorToolbarPr
 
       {/* ── 링크 입력 바 (조건부 렌더링) ── */}
       {showLinkInput && (
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          padding: '8px 12px',
-          backgroundColor: '#F8F8F8',
-          borderTop: '1px solid #EBEBEB',
-        }}>
-          <span style={{ fontSize: '12px', color: '#888888', fontWeight: '500', flexShrink: 0 }}>
+        <div className="flex items-center gap-2 px-3 py-2 bg-[#F8F8F8] border-t border-[#EBEBEB]">
+          <span className="text-[12px] text-[#888888] font-medium flex-shrink-0">
             링크 URL
           </span>
           <input
@@ -202,55 +165,17 @@ export default function EditorToolbar({ editor, onImageUpload }: EditorToolbarPr
               if (e.key === 'Escape') cancelLink()
             }}
             placeholder="https://example.com"
-            style={{
-              flex: 1,
-              padding: '6px 10px',
-              fontSize: '13px',
-              color: '#111111',
-              backgroundColor: '#FFFFFF',
-              border: '1px solid #DDDDDD',
-              borderRadius: '7px',
-              outline: 'none',
-              fontFamily: 'inherit',
-              transition: 'border-color 0.1s',
-            }}
-            onFocus={(e) => { e.currentTarget.style.borderColor = '#111111' }}
-            onBlur={(e) => { e.currentTarget.style.borderColor = '#DDDDDD' }}
+            className="flex-1 px-2.5 py-1.5 text-[13px] text-[#111111] bg-white border border-[#DDDDDD] rounded-lg outline-none focus:border-[#111111] transition-colors"
           />
           <button
             onClick={applyLink}
-            style={{
-              padding: '6px 14px',
-              fontSize: '12.5px',
-              fontWeight: '600',
-              color: '#FFFFFF',
-              backgroundColor: '#111111',
-              border: 'none',
-              borderRadius: '7px',
-              cursor: 'pointer',
-              fontFamily: 'inherit',
-              flexShrink: 0,
-              transition: 'background-color 0.1s',
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#333333'}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#111111'}
+            className="px-3.5 py-1.5 text-[12.5px] font-semibold text-white bg-[#111111] hover:bg-[#333333] rounded-lg flex-shrink-0 transition-colors border-none cursor-pointer"
           >
             적용
           </button>
           <button
             onClick={cancelLink}
-            style={{
-              padding: '6px 12px',
-              fontSize: '12.5px',
-              fontWeight: '500',
-              color: '#888888',
-              backgroundColor: 'transparent',
-              border: '1px solid #E5E5E5',
-              borderRadius: '7px',
-              cursor: 'pointer',
-              fontFamily: 'inherit',
-              flexShrink: 0,
-            }}
+            className="px-3 py-1.5 text-[12.5px] font-medium text-[#888888] border border-[#E5E5E5] rounded-lg flex-shrink-0 bg-transparent cursor-pointer"
           >
             취소
           </button>
