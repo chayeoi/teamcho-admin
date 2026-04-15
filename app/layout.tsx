@@ -14,8 +14,8 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Studio Admin",
-  description: "Content Management Dashboard",
+  title: "관리자 대시보드",
+  description: "관리자 대시보드",
 };
 
 export default function RootLayout({
