@@ -51,7 +51,7 @@ export async function proxy(request: NextRequest) {
 
   // /lawyers 경로는 super_admin만 접근 가능
   if (pathname.startsWith('/lawyers')) {
-    const role = user.user_metadata?.role
+    const role = user?.user_metadata?.role
     if (role !== 'super_admin') {
       const url = request.nextUrl.clone()
       url.pathname = '/posts'
