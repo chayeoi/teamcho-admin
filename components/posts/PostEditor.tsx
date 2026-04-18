@@ -52,12 +52,12 @@ export function PostEditor({ initialData }: PostEditorProps) {
       if (postId) {
         const { error } = await updatePost(postId, { title, content })
         if (error) { toast.error('저장 실패: ' + error); return }
-        toast.success('임시저장 완료')
+        toast.success('저장 완료')
       } else {
         const { data, error } = await createPost({ title, content })
         if (error || !data) { toast.error('저장 실패'); return }
         setPostId(data.id)
-        toast.success('임시저장 완료')
+        toast.success('저장 완료')
         router.replace(`/posts/${data.id}/edit`)
       }
     })
@@ -99,12 +99,12 @@ export function PostEditor({ initialData }: PostEditorProps) {
                 : 'text-[#555555] bg-[#F5F5F5] hover:bg-[#EBEBEB] cursor-pointer'
             )}
           >
-            {isSaving ? '저장 중...' : '임시저장'}
+            {isSaving ? '저장 중...' : '저장하기'}
           </button>
 
           <button
             onClick={() => {
-              if (!postId) { toast.error('먼저 임시저장을 해 주세요'); return }
+              if (!postId) { toast.error('먼저 저장을 해 주세요'); return }
               setPublishDialogOpen(true)
             }}
             className="px-4 py-1.5 text-[13px] font-bold text-white bg-gradient-to-br from-[#1A1A1A] to-[#2E2E2E] rounded-lg shadow-md hover:-translate-y-px hover:shadow-lg transition-all border-none cursor-pointer"
