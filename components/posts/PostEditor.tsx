@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { toast } from 'sonner'
 import { createPost, updatePost } from '@/lib/actions/posts'
 import { PublishDialog } from '@/components/posts/PublishDialog'
-import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/Button'
 
 const TipTapEditor = dynamic(
   () => import('@/components/editor/TipTapEditor').then((m) => m.default),
@@ -89,28 +89,25 @@ export function PostEditor({ initialData }: PostEditorProps) {
             </span>
           )}
 
-          <button
+          <Button
+            variant="secondary"
+            size="md"
+            loading={isSaving}
             onClick={handleSave}
-            disabled={isSaving}
-            className={cn(
-              'px-4 py-1.5 text-[13px] font-medium rounded-lg border border-[#E5E5E5] transition-all',
-              isSaving
-                ? 'text-[#AAAAAA] bg-transparent cursor-not-allowed'
-                : 'text-[#555555] bg-[#F5F5F5] hover:bg-[#EBEBEB] cursor-pointer'
-            )}
           >
-            {isSaving ? '저장 중...' : '저장하기'}
-          </button>
+            저장하기
+          </Button>
 
-          <button
+          <Button
+            variant="primary"
+            size="md"
             onClick={() => {
               if (!postId) { toast.error('먼저 저장을 해 주세요'); return }
               setPublishDialogOpen(true)
             }}
-            className="px-4 py-1.5 text-[13px] font-bold text-white bg-gradient-to-br from-[#1A1A1A] to-[#2E2E2E] rounded-lg shadow-md hover:-translate-y-px hover:shadow-lg transition-all border-none cursor-pointer"
           >
             발행하기
-          </button>
+          </Button>
         </div>
       </div>
 

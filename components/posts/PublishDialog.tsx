@@ -17,7 +17,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from '@/components/ui/dialog'
+} from '@/components/ui/Dialog'
+import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
 
 interface PublishDialogProps {
@@ -314,27 +315,25 @@ export function PublishDialog({ postId, open, onOpenChange, onSuccess }: Publish
 
           {/* 하단 버튼 */}
           <div className="flex gap-2">
-            <button
-              onClick={() => onOpenChange(false)}
+            <Button
+              variant="outline"
+              size="lg"
               disabled={isLoading}
-              className="flex-1 py-2.5 text-[13px] font-semibold text-[#666666] bg-transparent border border-[#E5E5E5] rounded-[9px] hover:bg-[#F5F5F5] transition-colors"
+              onClick={() => onOpenChange(false)}
+              className="flex-1"
             >
               취소
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="primary"
+              size="lg"
+              loading={isLoading}
+              disabled={isDisabled && !isLoading}
               onClick={handlePublish}
-              disabled={isDisabled}
-              className={cn(
-                'flex-1 py-2.5 text-[13px] font-bold text-white border-none rounded-[9px]',
-                isDisabled
-                  ? 'bg-[#CCCCCC] cursor-not-allowed'
-                  : 'bg-gradient-to-br from-[#1A1A1A] to-[#2E2E2E] shadow-[0_2px_8px_rgba(0,0,0,0.2)] cursor-pointer',
-              )}
+              className="flex-1"
             >
-              {isLoading
-                ? (mode === 'scheduled' ? '예약 중...' : '발행 중...')
-                : (mode === 'scheduled' ? '예약 발행' : '즉시 발행')}
-            </button>
+              {mode === 'scheduled' ? '예약 발행' : '즉시 발행'}
+            </Button>
           </div>
         </div>
       </DialogContent>

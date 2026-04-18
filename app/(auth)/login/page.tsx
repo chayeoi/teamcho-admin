@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/Button'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -94,18 +94,15 @@ export default function LoginPage() {
           </div>
         )}
 
-        <button
+        <Button
           type="submit"
-          disabled={loading}
-          className={cn(
-            'w-full py-[11px] text-sm font-bold text-white border-none rounded-[9px] transition-all duration-150 font-[inherit]',
-            loading
-              ? 'bg-[#888888] cursor-not-allowed shadow-none'
-              : 'bg-gradient-to-br from-[#1A1A1A] to-[#2E2E2E] cursor-pointer shadow-[0_2px_8px_rgba(0,0,0,0.2)]'
-          )}
+          variant="primary"
+          size="lg"
+          loading={loading}
+          className="w-full text-sm"
         >
-          {loading ? '로그인 중...' : '로그인 →'}
-        </button>
+          로그인 →
+        </Button>
       </form>
     </div>
   )
