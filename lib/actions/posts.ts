@@ -16,6 +16,8 @@ export type Post = {
   created_at: string
   updated_at: string
   author_id: string | null
+  thumbnail_url: string | null
+  tags: string[]
 }
 
 export async function getPosts(filter?: 'all' | PostStatus): Promise<Post[]> {
@@ -60,6 +62,8 @@ export async function getPost(id: string): Promise<Post | null> {
 export async function createPost(data: {
   title: string
   content: string
+  thumbnail_url?: string | null
+  tags?: string[]
 }): Promise<{ data: Post | null; error: string | null }> {
   const supabase = await createClient()
 
@@ -73,6 +77,8 @@ export async function createPost(data: {
       status: 'draft',
       is_visible: true,
       author_id: user.user?.id,
+      thumbnail_url: data.thumbnail_url ?? null,
+      tags: data.tags ?? [],
     })
     .select()
     .single()
@@ -87,7 +93,7 @@ export async function createPost(data: {
 
 export async function updatePost(
   id: string,
-  data: { title?: string; content?: string }
+  data: { title?: string; content?: string; thumbnail_url?: string | null; tags?: string[] }
 ): Promise<{ data: Post | null; error: string | null }> {
   const supabase = await createClient()
 

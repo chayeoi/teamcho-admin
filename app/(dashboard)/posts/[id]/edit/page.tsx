@@ -21,6 +21,8 @@ export default async function EditPostPage({ params }: PageProps) {
         title: post.title,
         content: post.content,
         status: post.status,
+        thumbnail_url: post.thumbnail_url,
+        tags: post.tags,
       }}
     />
   )

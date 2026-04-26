@@ -2,8 +2,10 @@
 
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { format } from 'date-fns'
 import { Post, deletePost, toggleVisibility } from '@/lib/actions/posts'
+import { resolveThumbnail } from '@/lib/utils/thumbnail'
 import { cn } from '@/lib/utils'
 
 interface PostListProps {
@@ -108,6 +110,17 @@ export function PostList({ posts }: PostListProps) {
               cfg.iconColor
             )}>
               {cfg.icon}
+            </div>
+
+            {/* 썸네일 */}
+            <div className="w-[52px] h-[30px] rounded-md overflow-hidden bg-[#F5F5F5] flex-shrink-0 relative">
+              <Image
+                src={resolveThumbnail(post)}
+                alt=""
+                fill
+                className="object-cover"
+                unoptimized
+              />
             </div>
 
             {/* 제목 */}

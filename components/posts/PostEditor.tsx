@@ -7,6 +7,8 @@ import Link from 'next/link'
 import { toast } from 'sonner'
 import { createPost, updatePost } from '@/lib/actions/posts'
 import { PublishDialog } from '@/components/posts/PublishDialog'
+import { ThumbnailPicker } from '@/components/posts/ThumbnailPicker'
+import { TagInput } from '@/components/posts/TagInput'
 import { Button } from '@/components/ui/Button'
 
 const TipTapEditor = dynamic(
@@ -30,6 +32,8 @@ interface PostEditorProps {
     title: string
     content: string
     status: string
+    thumbnail_url?: string | null
+    tags?: string[]
   }
 }
 
@@ -43,6 +47,8 @@ export function PostEditor({ initialData }: PostEditorProps) {
   const [title, setTitle] = useState(initialData?.title || '')
   const [content, setContent] = useState(initialData?.content || '')
   const [postId, setPostId] = useState(initialData?.id)
+  const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(initialData?.thumbnail_url ?? null)
+  const [tags, setTags] = useState<string[]>(initialData?.tags ?? [])
   const [publishDialogOpen, setPublishDialogOpen] = useState(false)
   const [isSaving, startSaving] = useTransition()
   const router = useRouter()
@@ -50,11 +56,11 @@ export function PostEditor({ initialData }: PostEditorProps) {
   async function handleSave() {
     startSaving(async () => {
       if (postId) {
-        const { error } = await updatePost(postId, { title, content })
+        const { error } = await updatePost(postId, { title, content, thumbnail_url: thumbnailUrl, tags })
         if (error) { toast.error('저장 실패: ' + error); return }
         toast.success('저장 완료')
       } else {
-        const { data, error } = await createPost({ title, content })
+        const { data, error } = await createPost({ title, content, thumbnail_url: thumbnailUrl, tags })
         if (error || !data) { toast.error('저장 실패'); return }
         setPostId(data.id)
         toast.success('저장 완료')
@@ -113,6 +119,16 @@ export function PostEditor({ initialData }: PostEditorProps) {
 
       {/* ── 에디터 본문 ── */}
       <div className="max-w-[820px] mx-auto w-full px-6 pt-9 pb-20">
+
+        {/* 썸네일 + 태그 카드 */}
+        <div className="flex flex-col gap-2.5 mb-2.5">
+          <ThumbnailPicker
+            value={thumbnailUrl}
+            content={content}
+            onChange={setThumbnailUrl}
+          />
+          <TagInput value={tags} onChange={setTags} />
+        </div>
 
         {/* 제목 카드 */}
         <div className="bg-white rounded-xl border border-[#EBEBEB] px-7 py-[22px] mb-2.5">
